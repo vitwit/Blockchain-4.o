@@ -3,14 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/jay-dee7/v4.O/cmd"
-	"github.com/jay-dee7/v4.O/core"
-	"github.com/jay-dee7/v4.O/wallet"
+	"github.com/vitwit/Blockchain-4.o/core"
+	"github.com/vitwit/Blockchain-4.o/wallet"
 )
 
 func main() {
-	cmd.Execute()
-
 	core.NewCore()
 	s := wallet.NewWallet("blockchain-4.0")
 	fmt.Println(s)
