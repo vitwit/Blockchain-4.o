@@ -11,4 +11,6 @@ func main() {
 	core.NewCore()
 	s := wallet.NewWallet("blockchain-4.0")
 	fmt.Println(s)
+	b := core.NewBlock("test")
+	fmt.Println(b)
 }
