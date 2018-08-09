@@ -2,86 +2,69 @@
 package core
 
 import (
-	"github.com/vitwit/Blockchain-4.o/config"
-	"crypto/sha256"
-	"bytes"
+	"time"
+	"strings"
 )
 
-//block function
+//Block is model for a single block in the blockchain
 type Block struct {
-	    Timestamp string
+	    Timestamp time.Time
         LastHash  string
         Hash      string
-        Data      []string
-        Nonce     int 
-        Difficulty int
+        Data      string
+        Nonce     int32
+        Difficulty int32
 }
 
-var  block Block
+// Genesis will return the initial block for a blockchain,
+// should only be called first time and once
+ func Genesis() Block {
+	b := Block{
+		Timestamp: time.Now().UTC(),
+		LastHash: "",
+		Hash: "0x01",
+		Data: "blockchain 4.0",
+		Nonce: 0,
+		Difficulty: Difficulty,
+	}
 
-func (b *Block) Init(timestamp string,lastHash string,hash string,data string,nonce int,difficulty string) {
 
-	b.Timestamp = timestamp
-	b.LastHash = lastHash
-	b.Hash = hash
-	b.Data = data
-	b.Nonce = nonce
-	b.Difficulty = config.DIFFICULTY 
+	return b
 }
 
- func genesis() Block{
-	
+// MineBlock will try to brute force nonce and if succeeded, generates a new block
+func MineBlock(lastBlock Block, data string) Block {
 
-	block.timestamp = "Genesis Block"
-	block.lastHash = "-----"
-	block.hash = "S2H3I4V5-A"
-	block.data = []string{ "0x01" }
-	block.nonce = 0
-	block.difficulty = config.DIFFICULTY
-	
-	return block
-}
-func mineBlock(lastBlock *Block,data string) Block{
-	
-    lastHash := lastBlock.hash
-    //console.log("fedee",lastHash.toString());
-    difficulty = lastBlock
-	nonce=0;
-	hash := lastBlock.
+		var nonce int32
+		var t time.Time
+		var hash string
+	for {
+		nonce += 1
+		t = time.Now().UTC()
+		Difficulty = adjustDifficulty(lastBlock)
+		hash, _ = newHash(t, lastBlock.Hash, data, nonce, Difficulty)
 
-	if 
+		if strings.HasPrefix(hash, "0000") {
+			break
+		}
+	}
+	newBlock := Block{
+		Timestamp: t,
+		Hash: hash,
+		Data: data,
+		Nonce: nonce,
+		Difficulty: Difficulty,
+	}
 
-	if hash.substring(0,difficulty) != '0'.repeat(difficulty {
-		nonce++;
-        timestamp=Date.now();
-        difficulty=Block.adjustDifficulty(lastBlock,timestamp);
-        hash = Block.hash(timestamp,lastHash,data,nonce,difficulty)	
-
-	})
-       return block
+	return newBlock
 }
 
+// adjustDifficulty changes difficulty to maintain a relative time for block mining
+func adjustDifficulty(lastBlock Block) int32 {
 
-func adjustDifficulty(block Block,data string) int {
-	difficulty=lastBlock.timestamp+MINE_RATE > currentime ? difficulty+1 : difficulty-1;
-    return difficulty;
-}
+	if lastBlock.Timestamp.Sub(time.Now().UTC()) < time.Second * 12 {
+		return  Difficulty + 1
+	}
 
-func hash(timestamp,lastHash,data,nonce,difficulty) ( hash.Hash ){
-
-
-
-	h := sha256.New()
-
-	b := bytes.Buffer
-
-	h
-	
-    return ChainUtil.hash(`${timestamp}${lastHash}${data}${nonce}${difficulty}`).toString();
-
-}
-static blockHash(block){
-    const{timestamp,lastHash,data,nonce,difficulty} = block;
-    return Block.hash(timestamp,lastHash,data,nonce,difficulty);
-}
+	return Difficulty - 1
 }
