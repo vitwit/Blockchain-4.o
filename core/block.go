@@ -68,3 +68,29 @@ func adjustDifficulty(lastBlock Block) int32 {
 
 	return Difficulty - 1
 }
+
+// newHash returns a new SHA256 hash, type-casted to a string
+func newHash(timestamp time.Time, lastHash, data string, nonce, difficulty int32) ( string, error ){
+
+	var h  bytes.Buffer
+
+	h.Write([]byte(timestamp.String()))
+	h.Write([]byte(lastHash))
+	h.Write([]byte(data))
+	h.Write([]byte(string(nonce)))
+	h.Write([]byte(string(difficulty)))
+
+	hash := sha256.Sum256(h.Bytes())
+
+	return string(hash[:]), nil
+}
+
+// blockHash generates hash for a block
+func  blockHash (block *Block) ( string, error ) {
+
+	bHash, err := newHash(block.Timestamp, block.LastHash, block.Data, block.Nonce, block.Difficulty)
+	utils.CheckError(err)
+	fmt.Printf("%x", bHash)
+
+	return bHash, nil
+}
